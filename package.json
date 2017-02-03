@@ -1,0 +1,37 @@
+{
+  "name": "mplayer",
+  "version": "1.0.0",
+  "description": "An app to play music and keep your music in sync",
+  "main": "bin/www",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rramaa/mplayer.git"
+  },
+  "author": "rramaa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rramaa/mplayer/issues"
+  },
+  "homepage": "https://github.com/rramaa/mplayer#readme",
+  "dependencies": {
+    "app-module-path": "^2.2.0",
+    "body-parser": "^1.16.0",
+    "compression": "^1.6.2",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^4.0.0",
+    "express": "^4.14.1",
+    "morgan": "^1.7.0",
+    "socket.io": "^1.7.2",
+    "socket.io-redis": "^3.1.0",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-register": "^6.22.0",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^1.16.3"
+  }
+}
