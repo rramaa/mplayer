@@ -17,13 +17,10 @@ if(typeof process.env.NODE_ENV == "undefined" || process.env.NODE_ENV == "develo
 console.log("Setting app path --> ", appPath);
 require('app-module-path').addPath(appPath);
 
-let http = require('http');
-let app = require('app');
+let server = require('app');
 let loggerService = require('services/loggerService');
 let port = process.env.PORT || 9000;
-app.set('port', port);
-let server = http.createServer(app);
 
-server.listen(app.get('port'), () => {
+server.listen(port, () => {
   loggerService.info("Listening on port", port);
 });

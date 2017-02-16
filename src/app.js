@@ -1,12 +1,13 @@
 'use strict';
 
 let path = require('path');
+let http = require('http');
 let express = require('express');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 let compression = require('compression');
 let morgan = require('morgan');
-
+require('marko/node-require').install();
 let loggerService = require('services/loggerService');
 let config = require('config/envConfig');
 
@@ -25,6 +26,19 @@ if(config.isLocal){
 		skip: function(req, res){ return res.statusCode < 400 }
 	}));
 	app.use(express.static(path.join(__dirname, "public")));
+	let chokidar = require('chokidar');
+	let markoReload = require('marko/hot-reload');
+	markoReload.enable();
+	let watcher = chokidar.watch([path.join(__dirname, 'views')]);
+	watcher.on('change', function(filename) {
+	    if (/\.marko$/.test(filename)) {
+	        // Resolve the filename to a full template path:
+	        let templatePath = path.join(filename);
+	        loggerService.info('Marko template modified: ', templatePath);
+	        // Pass along the *full* template path to marko
+	        markoReload.handleFileModified(templatePath);
+	    }
+	});
 } else {
 	app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms'));
 	app.use(express.static(path.join(__dirname, "..", "dist"), {
@@ -32,8 +46,10 @@ if(config.isLocal){
 	}));
 }
 
-router.get("/aaa", (req, res, next) => {
-	res.send("sdfsdfsdfds");
+router.get("/test", (req, res, next) => {
+	let marko = require('marko');
+	let template = marko.load(path.join(__dirname, 'views', 'index.marko'));
+	template.render({buttonText: "test"}, res);
 });
 
 app.use(router);
