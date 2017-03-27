@@ -9,6 +9,7 @@ let compression = require('compression');
 let morgan = require('morgan');
 require('marko/node-require').install();
 let loggerService = require('services/loggerService');
+let routeService = require('services/routeService');
 let config = require('config/envConfig');
 
 let app = express();
@@ -29,7 +30,7 @@ if(config.isLocal){
 	let chokidar = require('chokidar');
 	let markoReload = require('marko/hot-reload');
 	markoReload.enable();
-	let watcher = chokidar.watch([path.join(__dirname, 'views')]);
+	let watcher = chokidar.watch([path.join(__dirname, '/modules/'), path.join(__dirname, '/templates/')]);
 	watcher.on('change', function(filename) {
 	    if (/\.marko$/.test(filename)) {
 	        // Resolve the filename to a full template path:
@@ -46,11 +47,7 @@ if(config.isLocal){
 	}));
 }
 
-router.get("/test", (req, res, next) => {
-	let marko = require('marko');
-	let template = marko.load(path.join(__dirname, 'views', 'index.marko'));
-	template.render({buttonText: "test"}, res);
-});
+routeService.setup(router);
 
 app.use(router);
 
